@@ -20,7 +20,7 @@ public class NaverApiController {
 
     @GetMapping("/navers")
     public ResponseEntity<? extends Object> findAll() {
-        return new ResponseEntity<>(naverRepository.findAll(), HttpStatus.OK);
+        return new ResponseEntity<>(naverRepository.findAll(), HttpStatus.OK); // body, status
     }
 
     @PostMapping("/navers")
