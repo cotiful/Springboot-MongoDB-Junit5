@@ -20,5 +20,9 @@ public class Naver {
     private String _id;
     private String company;
     private String title;
-    private String createdAt;
+    private LocalDateTime createdAt;
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt.minusHours(9);
+    }
 }

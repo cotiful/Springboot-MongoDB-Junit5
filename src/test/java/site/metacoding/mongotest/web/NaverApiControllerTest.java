@@ -29,12 +29,12 @@ import site.metacoding.mongotest.domain.Naver;
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT) // 통합테스트
 public class NaverApiControllerTest {
 
-    @Autowired
+    @Autowired // 필요한 의존 객체의 "타입"에 해당하는 빈을 주입
     private TestRestTemplate rt;
 
     private static HttpHeaders headers;
 
-    @BeforeAll
+    @BeforeAll // Junit의 기본 어노테이션 static 선언과,해당 클래스를 초기화할 때 딱 한 번 사용
     public static void init() {
         headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
@@ -49,26 +49,26 @@ public class NaverApiControllerTest {
         naver.setCompany("재밌어요");
 
         ObjectMapper om = new ObjectMapper();
-        String content = om.writeValueAsString(naver); // 오브젝트를 JSON으로 변환 ,
+        String content = om.writeValueAsString(naver); // 오브젝트를 JSON으로 변환 , Json->Object는 readValue
         HttpEntity<String> httpEntity = new HttpEntity<>(content, headers);
 
         // when : 이걸 실행할때
         ResponseEntity<String> response = rt.exchange("/navers", HttpMethod.POST, httpEntity, String.class);
 
         // then: 어떤 결과를 원하느냐
-        // System.out.println("==========================================");
-        // System.out.println(response.getBody());
-        // System.out.println(response.getHeaders());
-        // System.out.println(response.getStatusCode()); // 컨트롤러는 상태코드만 확인해봐도 된다. 201
+        System.out.println("==========================================");
+        System.out.println("바디데이터:" + response.getBody());
+        System.out.println("헤더데이터:" + response.getHeaders());
+        System.out.println("상태코드:" + response.getStatusCode()); // 컨트롤러는 상태코드만 확인해봐도 된다. 201
         // CREATED
         // System.out.println(response.getStatusCode().is2xxSuccessful());
         // System.out.println("==========================================");
         // assertTrue(response.getStatusCode().is2xxSuccessful());
 
         DocumentContext dc = JsonPath.parse(response.getBody()); // junit jsonPath
-        // System.out.println(dc.jsonString());
+        System.out.println("dc_json" + dc.jsonString());
         String title = dc.read("$.title");
-        // System.out.println(title);
+        System.out.println("타이틀:" + title);
         assertEquals("스프링1강", title); // title 자리는 기대하는 값 (key)
     }
 
